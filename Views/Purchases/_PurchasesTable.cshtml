@@ -1,0 +1,158 @@
+@model List<Purchase>
+
+
+@if (Model == null || Model.Count == 0)
+{
+    <div class="card rounded-4 shadow-sm border-0 bg-white text-center py-5">
+        <div class="card-body">
+            <i class="bi bi-inbox fs-1 d-block mb-3 text-muted opacity-50"></i>
+            <p class="mb-0 fs-5 text-muted">No purchases found</p>
+            <small class="text-muted">Start by adding your first purchase</small>
+        </div>
+    </div>
+}
+else
+{
+    @foreach (var purchase in Model)
+    {
+        <div class="purchase-card card rounded-4 shadow-sm mb-4 overflow-hidden mx-3 px-2">
+            <!-- Header Row -->
+            <div class="row g-0">
+                <div class="col header-cell">Date & Time</div>
+                <div class="col header-cell">Supplier</div>
+                <div class="col header-cell">Total Purchase Items</div>
+                <div class="col header-cell">Total Qty</div>
+                <div class="col header-cell">Expected Total </div>
+                <div class="col header-cell">@(purchase.DiscountAmount >= 0 ? "Discount" : "Additional Charges")</div>
+                <div class="col header-cell">Total Paid Price</div>
+                <div class="col header-cell">Actions</div>
+            </div>
+
+            <div class="row g-0 bg-white">
+
+                <div class="col data-cell">
+                    <div class="cell-label">Date & Time</div>
+                    <div class="cell-value">@purchase.PurchaseDate.ToString("dd/MM/yyyy")</div>
+                    <small class="text-muted">@purchase.PurchaseDate.ToString("hh:mm tt")</small>
+                </div>
+                <div class="col data-cell">
+                    <div class="cell-label">Supplier Name</div>
+                    <div class="cell-value">
+                        <i class="bi bi-building me-1 text-primary"></i>
+                        @purchase.Supplier?.SupplierName
+                    </div>
+                </div>
+                <div class="col data-cell text-center">
+                    <div class="cell-label">Total Items</div>
+                    <div class="cell-value">
+                        <span class="badge bg-info bg-opacity-25 text-info px-3 py-2">
+                            @purchase.PurchaseProducts.Count items
+                        </span>
+                    </div>
+                </div>
+                <div class="col data-cell text-center">
+                    <div class="cell-label">Total Quantity</div>
+                    <div class="cell-value">
+                        <span class="badge bg-info bg-opacity-25 text-info px-3 py-2">
+                            @purchase.NumberOfProducts Qty
+                        </span>
+                    </div>
+                </div>
+                <div class="col data-cell">
+                    <div class="cell-label">Expected Amount</div>
+                    <div class="cell-value text-success fs-5">
+                        Rs @purchase.TotalExpectedAmount.ToString("N2")
+                    </div>
+                </div>
+                <div class="col data-cell">
+                    <div class="cell-label">@(purchase.DiscountAmount >= 0 ? "Discount" : "Additional") Amount</div>
+                    <div class="cell-value text-success fs-5">
+                        Rs @((purchase.DiscountAmount >= 0 ? purchase.DiscountAmount : Math.Abs(purchase.DiscountAmount)).ToString("N2"))
+                    </div>
+                </div>
+                <div class="col data-cell">
+                    <div class="cell-label">Total Amount</div>
+                    <div class="cell-value text-success fs-5">
+                        Rs @purchase.TotalPaidAmount.ToString("N2")
+                    </div>
+                </div>
+                <div class="col data-cell">
+                    <div class="d-flex justify-content-center gap-2">
+                        <a class="btn btn-sm btn-outline-info action-btn"
+                           asp-action="ViewPurchase"
+                           asp-route-id="@purchase.Id"
+                           title="View">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                        @* <a class="btn btn-sm btn-outline-primary action-btn"
+                           asp-action="EditPurchase"
+                           asp-route-id="@purchase.Id"
+                           title="Edit">
+                            <i class="bi bi-pencil"></i>
+                        </a> *@
+                        <a class="btn btn-sm btn-outline-danger action-btn"
+                           asp-action="DeletePurchase"
+                           asp-route-id="@purchase.Id"
+                           title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Table -->
+            @if (purchase.PurchaseProducts != null && purchase.PurchaseProducts.Count > 0)
+            {
+                <div class="row g-0">
+                    <div class="col-12 products-table-cell">
+                        <table class="table mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="text-center py-3" style="width: 10%;">#</th>
+                                    <th class="py-3" style="width: 40%;">Product Name</th>
+                                    <th class="text-center py-3" style="width: 15%;">Qty</th>
+                                    <th class="text-center py-3" style="width: 15%;">Unit Cost</th>
+                                    <th class="text-center py-3" style="width: 20%;">Line Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int itemIndex = 1;
+                                }
+                                @foreach (var product in purchase.PurchaseProducts)
+                                {
+                                    <tr class="product-row">
+                                        <td class="text-center py-3">
+                                            <span class="badge bg-light text-dark">@itemIndex</span>
+                                        </td>
+                                        <td class="py-3">
+                                            <i class="bi bi-box-seam me-2 text-muted"></i>
+                                            <span class="fw-semibold">@product.Product?.ProductName</span>
+                                        </td>
+                                        <td class="text-center py-3">
+                                            <span class="badge bg-secondary">@product.Quantity</span>
+                                        </td>
+                                        <td class="text-center py-3">
+                                            Rs @product.CostPrice.ToString("N2")
+                                        </td>
+                                        <td class="text-center py-3">
+                                            <span class="fw-bold text-success">
+                                                Rs @product.LineTotal.ToString("N2")
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    itemIndex++;
+                                }
+                               
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+}
+
+
+
+

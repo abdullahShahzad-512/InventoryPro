@@ -1,0 +1,104 @@
+﻿
+@model List<Purchase>
+@{
+    ViewData["Title"] = "Purchases";
+    int currentPage = ViewBag.CurrentPage == null ? 1 : Convert.ToInt32(ViewBag.CurrentPage);
+    int pageSize = ViewBag.PageSize == null ? 3 : Convert.ToInt32(ViewBag.PageSize);
+
+    int total = Convert.ToInt32(ViewBag.TotalEntries);
+
+    int start = (currentPage - 1) * pageSize + 1;
+    int end = Math.Min(currentPage * pageSize, total);
+}
+
+@if (TempData["successMsg"] != null)
+{
+    <div class="popup popup-success" role="alert">@TempData["successMsg"]</div>
+}
+@if (TempData["failMsg"] != null)
+{
+    <div class="popup popup-fail" role="alert">@TempData["failMsg"]</div>
+}
+
+
+<div class="flex-fill p-4 bg-light bg-opacity-50">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold text-dark mb-1">Purchases</h2>
+                <p class="text-muted mb-0">Record incoming inventory purchases</p>
+            </div>
+            <a class="btn btn-primary rounded-3 shadow-sm" asp-controller="Purchases" asp-action="AddPurchase">
+                <i class="bi bi-plus-lg me-2"></i>Add Purchase
+            </a>
+        </div>
+
+        @await Html.PartialAsync("_PurchasesTable", Model)
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <div class="text-muted" id="paginationInfo">
+                Showing @start to @end of <b>@total</b>
+            </div>
+            <nav>
+                <ul class="pagination mb-0" id="paginationControls">
+
+                    <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                        <a class="page-link" asp-action="Purchases" asp-route-page="@(ViewBag.CurrentPage - 1)">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+
+                    @{
+                        int totalPages = ViewBag.TotalPages;
+                        int current = ViewBag.CurrentPage;
+                        int startPage = Math.Max(1, current - 2);
+                        int endPage = Math.Min(totalPages, current + 2);
+
+                        // Always show first page
+                        if (startPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="Purchases" asp-route-page="1">1</a>
+                            </li>
+                            if (startPage > 2)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+                        }
+
+                        // Show pages around current page
+                        for (int i = startPage; i <= endPage; i++)
+                        {
+                            <li class="page-item @(i == current ? "active" : "")">
+                                <a class="page-link" asp-action="Purchases" asp-route-page="@i">@i</a>
+                            </li>
+                        }
+
+                        // Always show last page
+                        if (endPage < totalPages)
+                        {
+                            if (endPage < totalPages - 1)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+                            <li class="page-item">
+                                <a class="page-link" asp-action="Purchases" asp-route-page="@totalPages">@totalPages</a>
+                            </li>
+                        }
+                    }
+
+                    <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                        <a class="page-link" asp-action="Purchases" asp-route-page="@(ViewBag.CurrentPage + 1)">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+</div>

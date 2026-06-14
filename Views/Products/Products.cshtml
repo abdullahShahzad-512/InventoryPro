@@ -1,0 +1,196 @@
+﻿@model List<Product>
+@{
+    ViewData["Title"] = "Products";
+    int currentPage = ViewBag.CurrentPage == null ? 1 : Convert.ToInt32(ViewBag.CurrentPage);
+    int pageSize = ViewBag.PageSize == null ? 10 : Convert.ToInt32(ViewBag.PageSize);
+
+    int total = Convert.ToInt32(ViewBag.TotalEntries);
+
+    int start = (currentPage - 1) * pageSize + 1;
+    int end = Math.Min(currentPage * pageSize, total);
+}
+
+@if (TempData["successMsg"] != null)
+{
+    <div class="popup popup-success" role="alert">@TempData["successMsg"]</div>
+}
+@if (TempData["failMsg"] != null)
+{
+    <div class="popup popup-fail" role="alert">@TempData["failMsg"]</div>
+}
+
+
+<div class="flex-fill p-4 pb-5 bg-light bg-opacity-50" style="min-height: 100vh;">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold text-dark">Products Management</h2>
+
+                <p class="text-muted mb-0">Manage your products</p>
+            </div>
+            <a class="btn btn-primary rounded-3" asp-action="AddProduct">
+                <i class="bi bi-plus-lg me-2"></i> Add New Product
+            </a>
+        </div>
+
+        <div class="card rounded-4 shadow-sm border-0 bg-white">
+            <div class="card-body">
+                <div class="row g-2 mb-4 align-items-center">
+                    <div class="col-md-7">
+                        <div class="input-group">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search products name..." />
+                            <button class="btn btn-primary" id="searchButton" type="button">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-5 text-end">
+                        <button id="filterButton" class="btn btn-outline-primary me-2">
+                            <i class="bi bi-funnel me-1"></i>Filters
+                        </button>
+                        <button id="clearFilters" class="btn btn-outline-secondary" style="display: none;">
+                            <i class="bi bi-x-circle me-1"></i>Clear Filters
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="productsTable" class="table table-hover align-middle">
+                        <thead class="table-light">
+
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Category</th>
+
+                                <th>Cost Price</th>
+
+                                <th>Sale Price</th>
+                                <th class="text-center"> Description</th>
+                                <th>Barcode</th>
+
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="productsTableBody">
+                            @await Html.PartialAsync("_ProductsTablePartial", Model)
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div class="text-muted" id="paginationInfo">
+                        Showing @start to @end of <b>@total</b>
+                    </div>
+                    <nav>
+                        <ul class="pagination mb-0" id="paginationControls">
+
+                            <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                                <a class="page-link" asp-action="Products" asp-route-page="@(ViewBag.CurrentPage - 1)">
+                                    <i class="bi bi-chevron-left"></i>
+                                </a>
+                            </li>
+
+                            @{
+                                int totalPages = ViewBag.TotalPages;
+                                int current = ViewBag.CurrentPage;
+                                int startPage = Math.Max(1, current - 2);
+                                int endPage = Math.Min(totalPages, current + 2);
+
+                                // Always show first page
+                                if (startPage > 1)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" asp-action="Products" asp-route-page="1">1</a>
+                                    </li>
+                                    if (startPage > 2)
+                                    {
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    }
+                                }
+
+                                // Show pages around current page
+                                for (int i = startPage; i <= endPage; i++)
+                                {
+                                    <li class="page-item @(i == current ? "active" : "")">
+                                        <a class="page-link" asp-action="Products" asp-route-page="@i">@i</a>
+                                    </li>
+                                }
+
+                                // Always show last page
+                                if (endPage < totalPages)
+                                {
+                                    if (endPage < totalPages - 1)
+                                    {
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    }
+                                    <li class="page-item">
+                                        <a class="page-link" asp-action="Products" asp-route-page="@totalPages">@totalPages</a>
+                                    </li>
+                                }
+                            }
+
+                            <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                                <a class="page-link" asp-action="Products" asp-route-page="@(ViewBag.CurrentPage + 1)">
+                                    <i class="bi bi-chevron-right"></i>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </nav>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Modal -->
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="filterModalLabel">
+                    <i class="bi bi-funnel me-2"></i>Filter Products
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="categoryFilter" class="form-label fw-semibold">Category</label>
+                    <select id="categoryFilter" class="form-select">
+                        <option value="">All Categories</option>
+                        @foreach (var cat in ViewBag.Categories)
+                        {
+                            <option value="@cat">@cat</option>
+                        }
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Price Range</label>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <input type="number" id="minPrice" class="form-control" placeholder="Min Price" min="0" step="0.01" />
+                        </div>
+                        <div class="col-6">
+                            <input type="number" id="maxPrice" class="form-control" placeholder="Max Price" min="0" step="0.01" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-1"></i>Cancel
+                </button>
+                <button type="button" class="btn btn-primary" id="applyFilters">
+                    <i class="bi bi-check-circle me-1"></i>Apply Filters
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

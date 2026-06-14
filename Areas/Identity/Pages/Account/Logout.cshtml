@@ -1,0 +1,583 @@
+﻿@page
+@model LogoutModel
+@{
+    ViewData["Title"] = "Log Out";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="logout-container">
+    <div class="row justify-content-center">
+        <div class="col-xl-6 col-lg-8 col-md-10">
+            <div class="logout-card card border-0 shadow-lg">
+                <div class="card-body p-5 text-center">
+                    
+                    <!-- Animated Logout Illustration -->
+                    <div class="logout-animation mb-4">
+                        <div class="animation-wrapper">
+                            <div class="door-animation">
+                                <div class="door-left"></div>
+                                <div class="door-right"></div>
+                                <div class="user-exit">
+                                    <i class="bi bi-person-circle"></i>
+                                </div>
+                            </div>
+                            <div class="door-frame"></div>
+                        </div>
+                    </div>
+
+                    <!-- Main Logout Content -->
+                    <div class="logout-content">
+                        @if (User.Identity?.IsAuthenticated ?? false)
+                        {
+                            <div class="logout-emoji-large mb-3">👋</div>
+                            <h1 class="logout-title fw-bold mb-3">Ready to Leave?</h1>
+                            
+                            <p class="logout-message text-muted mb-4 px-lg-4">
+                                You're currently logged in as 
+                                <span class="current-user fw-semibold text-primary">@User.Identity?.Name</span>.
+                                Are you sure you want to sign out of your account?
+                            </p>
+                            
+                            <!-- Session Info Card -->
+                            <div class="session-info card bg-light border-0 mb-4 mx-auto" style="max-width: 500px;">
+                                <div class="card-body p-4">
+                                    <h6 class="fw-semibold mb-3 text-dark">
+                                        <i class="bi bi-info-circle text-primary me-2"></i>
+                                        Current Session Information
+                                    </h6>
+                                    <div class="row g-3 text-start">
+                                        <div class="col-6">
+                                            <div class="info-item d-flex align-items-start gap-2">
+                                                <i class="bi bi-clock text-primary mt-1"></i>
+                                                <div>
+                                                    <small class="text-muted d-block">Session Started</small>
+                                                    <p class="mb-0 fw-semibold small">@DateTime.Now.AddHours(-1).ToString("h:mm tt")</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="info-item d-flex align-items-start gap-2">
+                                                <i class="bi bi-device-ssd text-primary mt-1"></i>
+                                                <div>
+                                                    <small class="text-muted d-block">Device</small>
+                                                    <p class="mb-0 fw-semibold small">This Browser</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="info-item d-flex align-items-start gap-2">
+                                                <i class="bi bi-shield-check text-success mt-1"></i>
+                                                <div>
+                                                    <small class="text-muted d-block">Security</small>
+                                                    <p class="mb-0 fw-semibold small">Active</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="info-item d-flex align-items-start gap-2">
+                                                <i class="bi bi-calendar text-primary mt-1"></i>
+                                                <div>
+                                                    <small class="text-muted d-block">Today</small>
+                                                    <p class="mb-0 fw-semibold small">@DateTime.Now.ToString("MMM dd, yyyy")</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="action-buttons mb-4">
+                                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post" class="d-inline-block w-100 mb-3">
+                                    <button type="submit" class="btn btn-danger btn-lg px-5 py-3 w-100">
+                                        <i class="bi bi-box-arrow-right me-2"></i>
+                                        Yes, Log Me Out
+                                    </button>
+                                </form>
+                                
+                                <a href="javascript:history.back()" class="btn btn-outline-secondary btn-lg px-5 py-3 w-100">
+                                    <i class="bi bi-arrow-left me-2"></i>
+                                    No, Take Me Back
+                                </a>
+                            </div>
+                            
+                            <!-- Quick Actions -->
+                            <div class="quick-actions pt-3 border-top">
+                                <p class="text-muted small mb-3">Or continue to</p>
+                                <div class="d-flex flex-wrap gap-2 justify-content-center">
+                                    <a asp-controller="Dashboard" asp-action="Index" class="btn btn-sm btn-outline-primary px-3">
+                                        <i class="bi bi-house me-1"></i>
+                                        Dashboard
+                                    </a>
+                                    <a asp-area="Identity" asp-page="/Account/Manage/Index" class="btn btn-sm btn-outline-primary px-3">
+                                        <i class="bi bi-person me-1"></i>
+                                        Profile
+                                    </a>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <a asp-controller="Users" asp-action="UserManagement" class="btn btn-sm btn-outline-primary px-3">
+                                            <i class="bi bi-person-gear me-1"></i>
+                                            User Management
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <!-- Success Logout State -->
+                            <div class="logout-emoji-large mb-3">✅</div>
+                            <h1 class="logout-title fw-bold mb-3">Successfully Logged Out</h1>
+                            
+                            <p class="logout-message text-muted mb-4 px-lg-4">
+                                You've been safely logged out of your account. 
+                                Your session has been cleared and all data has been secured.
+                            </p>
+                            
+                            <!-- Success Animation -->
+                            <div class="success-animation mb-4">
+                                <div class="success-checkmark">
+                                    <div class="check-icon">
+                                        <span class="icon-line line-tip"></span>
+                                        <span class="icon-line line-long"></span>
+                                        <div class="icon-circle"></div>
+                                        <div class="icon-fix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Security Info -->
+                            <div class="alert alert-success border-0 mb-4 mx-auto" style="max-width: 500px;">
+                                <i class="bi bi-shield-check me-2"></i>
+                                <strong>Secure Logout Completed</strong>
+                                <p class="mb-0 mt-2 small">All your data has been protected and your session has been terminated.</p>
+                            </div>
+                            
+                            <!-- Next Steps -->
+                            <div class="next-steps card bg-light border-0 mb-4">
+                                <div class="card-body p-4">
+                                    <h6 class="fw-semibold mb-3 text-dark">What would you like to do next?</h6>
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary w-100 py-3">
+                                                <i class="bi bi-box-arrow-in-right d-block fs-4 mb-2"></i>
+                                                <span class="small">Login Again</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <a asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-primary w-100 py-3">
+                                                <i class="bi bi-house d-block fs-4 mb-2"></i>
+                                                <span class="small">Home Page</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-outline-secondary w-100 py-3">
+                                                <i class="bi bi-person-plus d-block fs-4 mb-2"></i>
+                                                <span class="small">Create Account</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Additional Help -->
+                            <div class="help-section pt-3 border-top">
+                                <p class="text-muted small mb-2">Need assistance?</p>
+                                <a href="#" class="btn btn-sm btn-link text-decoration-none">
+                                    <i class="bi bi-question-circle me-1"></i>
+                                    Contact Support
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Tips -->
+            @if (User.Identity?.IsAuthenticated ?? false)
+            {
+                <div class="security-tips card border-0 shadow-sm mt-4">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="tip-icon bg-warning bg-opacity-10 rounded-circle p-2 me-3">
+                                <i class="bi bi-lightbulb text-warning fs-4"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-semibold mb-0">Security Tip</h6>
+                                <p class="text-muted small mb-0">Always logout from shared devices</p>
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <div class="tip-item bg-light rounded p-3">
+                                    <i class="bi bi-shield-check text-success me-2"></i>
+                                    <small>Clear browser cache after logout</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="tip-item bg-light rounded p-3">
+                                    <i class="bi bi-lock text-primary me-2"></i>
+                                    <small>Use strong, unique passwords</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .logout-container {
+        padding: 40px 0;
+        min-height: calc(100vh - 200px);
+    }
+
+    .logout-card {
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    .logout-emoji-large {
+        font-size: 4rem;
+        animation: wave 1s ease-in-out;
+    }
+
+    .logout-title {
+        font-size: 2.5rem;
+        color: #1e293b;
+    }
+
+    .logout-message {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #64748b;
+    }
+
+    .current-user {
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(67, 97, 238, 0.05));
+        padding: 4px 12px;
+        border-radius: 8px;
+    }
+
+    /* Door Animation */
+    .logout-animation {
+        position: relative;
+        height: 150px;
+        margin: 0 auto 2rem;
+    }
+
+    .animation-wrapper {
+        position: relative;
+        width: 120px;
+        height: 150px;
+        margin: 0 auto;
+        perspective: 1000px;
+    }
+
+    .door-frame {
+        position: absolute;
+        width: 120px;
+        height: 150px;
+        border: 4px solid var(--primary-color);
+        border-radius: 8px;
+        z-index: 1;
+    }
+
+    .door-animation {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+    }
+
+    .door-left, .door-right {
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        transform-origin: left center;
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 2;
+    }
+
+    .door-left {
+        left: 0;
+        border-right: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px 0 0 8px;
+    }
+
+    .door-right {
+        right: 0;
+        transform-origin: right center;
+        border-left: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 0 8px 8px 0;
+    }
+
+    .user-exit {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 3rem;
+        color: var(--primary-color);
+        z-index: 3;
+        opacity: 1;
+        transition: all 1s ease;
+    }
+
+    /* Session Info */
+    .session-info {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Action Buttons */
+    .action-buttons .btn {
+        border-radius: 12px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .action-buttons .btn-danger {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        border: none;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .action-buttons .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+    }
+
+    .action-buttons .btn-outline-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(100, 116, 139, 0.15);
+    }
+
+    /* Quick Actions */
+    .quick-actions .btn-sm {
+        border-radius: 8px;
+        transition: all 0.2s ease;
+    }
+
+    .quick-actions .btn-sm:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(67, 97, 238, 0.2);
+    }
+
+    /* Success Checkmark */
+    .success-checkmark {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto;
+    }
+
+    .check-icon {
+        width: 80px;
+        height: 80px;
+        position: relative;
+        border-radius: 50%;
+        box-sizing: content-box;
+        border: 4px solid #10b981;
+    }
+
+    .icon-line {
+        height: 5px;
+        background-color: #10b981;
+        display: block;
+        border-radius: 2px;
+        position: absolute;
+        z-index: 10;
+    }
+
+    .line-tip {
+        top: 46px;
+        left: 14px;
+        width: 25px;
+        transform: rotate(45deg);
+        animation: icon-line-tip 0.75s;
+    }
+
+    .line-long {
+        top: 38px;
+        right: 8px;
+        width: 47px;
+        transform: rotate(-45deg);
+        animation: icon-line-long 0.75s;
+    }
+
+    .icon-circle {
+        top: -4px;
+        left: -4px;
+        z-index: 10;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        position: absolute;
+        box-sizing: content-box;
+        border: 4px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .icon-fix {
+        top: 8px;
+        width: 5px;
+        left: 26px;
+        z-index: 1;
+        height: 85px;
+        position: absolute;
+        transform: rotate(-45deg);
+        background-color: white;
+    }
+
+    /* Next Steps */
+    .next-steps .btn {
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .next-steps .btn:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Security Tips */
+    .security-tips {
+        border-radius: 12px;
+    }
+
+    .tip-icon {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .tip-item {
+        transition: all 0.2s ease;
+    }
+
+    .tip-item:hover {
+        background: white !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Animations */
+    keyframes wave {
+        0%, 100% { transform: rotate(0deg); }
+        25% { transform: rotate(-10deg); }
+        75% { transform: rotate(10deg); }
+    }
+
+    keyframes icon-line-tip {
+        0% { width: 0; left: 1px; top: 19px; }
+        54% { width: 0; left: 1px; top: 19px; }
+        70% { width: 50px; left: -8px; top: 37px; }
+        84% { width: 17px; left: 21px; top: 48px; }
+        100% { width: 25px; left: 14px; top: 46px; }
+    }
+
+    keyframes icon-line-long {
+        0% { width: 0; right: 46px; top: 54px; }
+        65% { width: 0; right: 46px; top: 54px; }
+        84% { width: 55px; right: 0px; top: 35px; }
+        100% { width: 47px; right: 8px; top: 38px; }
+    }
+
+    keyframes ripple-animation {
+        to {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+
+    /* Responsive Design */
+    media (max-width: 768px) {
+        .logout-title {
+            font-size: 2rem;
+        }
+
+        .logout-emoji-large {
+            font-size: 3rem;
+        }
+
+        .logout-message {
+            font-size: 1rem;
+        }
+
+        .action-buttons .btn {
+            padding: 12px 24px !important;
+        }
+    }
+</style>
+
+@section Scripts {
+    <script>
+        // Animate door opening on load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (document.querySelector('.door-animation')) {
+                setTimeout(() => {
+                    const doorLeft = document.querySelector('.door-left');
+                    const doorRight = document.querySelector('.door-right');
+                    
+                    if (doorLeft && doorRight) {
+                        doorLeft.style.transform = 'rotateY(-45deg)';
+                        doorRight.style.transform = 'rotateY(45deg)';
+                        
+                        // Animate user exiting
+                        setTimeout(() => {
+                            const userExit = document.querySelector('.user-exit');
+                            if (userExit) {
+                                userExit.style.transition = 'transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.5s';
+                                userExit.style.transform = 'translate(-50%, -50%) translateX(100px) rotate(20deg)';
+                                userExit.style.opacity = '0.3';
+                            }
+                        }, 800);
+                    }
+                }, 1000);
+            }
+
+            // Add ripple effect to buttons
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        border-radius: 50%;
+                        background: rgba(255, 255, 255, 0.6);
+                        transform: scale(0);
+                        animation: ripple-animation 0.6s linear;
+                        width: ${size}px;
+                        height: ${size}px;
+                        top: ${y}px;
+                        left: ${x}px;
+                        pointer-events: none;
+                    `;
+                    
+                    this.appendChild(ripple);
+                    setTimeout(() => ripple.remove(), 600);
+                });
+            });
+
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    history.back();
+                }
+                if (e.key === 'l' && e.ctrlKey) {
+                    e.preventDefault();
+                    document.querySelector('form button[type="submit"]')?.click();
+                }
+            });
+        });
+    </script>
+}

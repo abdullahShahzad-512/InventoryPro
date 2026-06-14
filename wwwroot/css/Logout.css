@@ -1,0 +1,384 @@
+﻿.logout-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+    .logout-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+        z-index: 1;
+    }
+
+/* Animated Door Illustration */
+.animation-wrapper {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+}
+
+.door-animation {
+    position: relative;
+    width: 150px;
+    height: 180px;
+    margin: 0 auto;
+    perspective: 1000px;
+}
+
+.door-left, .door-right {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(135deg, #1e293b, #334155);
+    border-radius: 8px;
+    transition: transform 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.door-left {
+    left: 0;
+    transform-origin: left;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.door-right {
+    right: 0;
+    transform-origin: right;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-exit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    color: var(--primary-color);
+    z-index: 10;
+    animation: float 3s ease-in-out infinite;
+}
+
+.door-frame {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border: 3px solid var(--primary-color);
+    border-radius: 15px;
+    opacity: 0.3;
+}
+
+/* Typography */
+.logout-title {
+    font-size: 2.5rem;
+    color: #1e293b;
+    position: relative;
+    display: inline-block;
+}
+
+.logout-emoji {
+    position: absolute;
+    top: -20px;
+    right: -40px;
+    font-size: 1.8rem;
+    animation: bounce 2s infinite;
+}
+
+.logout-message {
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.current-user {
+    background: rgba(67, 97, 238, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-style: italic;
+}
+
+/* Session Info Card */
+.session-info {
+    border-radius: 15px;
+    background: linear-gradient(135deg, #ffffff, #f8fafc);
+    border-left: 4px solid var(--primary-color);
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+}
+
+    .info-item i {
+        font-size: 1.2rem;
+    }
+
+/* Action Buttons */
+.action-buttons .btn {
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.action-buttons .btn-danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    border: none;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+    .action-buttons .btn-danger:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+    }
+
+.action-buttons .btn-outline-secondary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(100, 116, 139, 0.2);
+}
+
+/* Success Animation */
+.success-checkmark {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #10b981, #059669);
+    position: relative;
+}
+
+.check-icon {
+    width: 30px;
+    height: 30px;
+    position: relative;
+}
+
+.icon-line {
+    height: 4px;
+    background-color: #fff;
+    border-radius: 2px;
+    position: absolute;
+}
+
+.line-tip {
+    top: 14px;
+    left: 4px;
+    width: 12px;
+    transform: rotate(45deg);
+    animation: icon-line-tip 0.75s;
+}
+
+.line-long {
+    top: 9px;
+    right: 4px;
+    width: 20px;
+    transform: rotate(-45deg);
+    animation: icon-line-long 0.75s;
+}
+
+/* Animations */
+@@keyframes float {
+    0%, 100% {
+        transform: translate(-50%, -50%) translateY(0);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) translateY(-10px);
+    }
+}
+
+@@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@@keyframes icon-line-tip {
+    0% {
+        width: 0;
+        left: 1px;
+        top: 19px;
+    }
+
+    54% {
+        width: 0;
+        left: 1px;
+        top: 19px;
+    }
+
+    70% {
+        width: 30px;
+        left: -8px;
+        top: 17px;
+    }
+
+    84% {
+        width: 12px;
+        left: 4px;
+        top: 14px;
+    }
+
+    100% {
+        width: 12px;
+        left: 4px;
+        top: 14px;
+    }
+}
+
+@@keyframes icon-line-long {
+    0% {
+        width: 0;
+        right: 16px;
+        top: 16px;
+    }
+
+    65% {
+        width: 0;
+        right: 16px;
+        top: 16px;
+    }
+
+    84% {
+        width: 30px;
+        right: -5px;
+        top: 16px;
+    }
+
+    100% {
+        width: 20px;
+        right: 4px;
+        top: 9px;
+    }
+}
+
+/* Quick Actions */
+.quick-actions .btn-sm {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
+
+/* Security Message */
+.security-message {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(16, 185, 129, 0.02));
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* Footer Links */
+.footer-links a {
+    transition: all 0.3s ease;
+    padding: 8px 0;
+    border-radius: 6px;
+}
+
+    .footer-links a:hover {
+        color: var(--primary-color);
+        background: rgba(67, 97, 238, 0.05);
+        transform: translateY(-2px);
+    }
+
+/* Interactive Door Animation on Hover */
+@media (hover: hover) {
+    .door-animation:hover .door-left {
+        transform: rotateY(-60deg);
+    }
+
+    .door-animation:hover .door-right {
+        transform: rotateY(60deg);
+    }
+}
+
+/* Responsive Design */
+@@media (max-width: 768px) {
+    .logout-container {
+        padding: 20px 15px;
+    }
+
+    .logout-title {
+        font-size: 2rem;
+    }
+
+    .logout-emoji {
+        top: -15px;
+        right: -30px;
+        font-size: 1.5rem;
+    }
+
+    .animation-wrapper {
+        width: 150px;
+        height: 150px;
+    }
+
+    .door-animation {
+        width: 120px;
+        height: 140px;
+    }
+
+    .user-exit {
+        font-size: 2.2rem;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+        .action-buttons .btn {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+    .footer-links .row {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+/* Dark Mode Support */
+@@media (prefers-color-scheme: dark) {
+    .logout-container {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    }
+
+    .logout-title {
+        color: #f1f5f9;
+    }
+
+    .logout-message {
+        color: #cbd5e1;
+    }
+
+    .session-info {
+        background: linear-gradient(135deg, #1e293b, #0f172a);
+        border-color: #475569;
+    }
+
+    .security-message {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+        border-color: #059669;
+    }
+
+    .current-user {
+        background: rgba(67, 97, 238, 0.2);
+        color: #a5b4fc;
+    }
+}

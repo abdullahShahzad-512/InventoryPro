@@ -1,0 +1,253 @@
+﻿@model List<Inventory>
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<link rel="stylesheet" href="~/css/AdminDashboard.css" asp-append-version="true" />
+
+<div class="dashboard-wrapper">
+    <!-- Page Header -->
+    <div class="page-header mb-4">
+        <div class="d-flex justify-content-between align-items-end">
+            <div>
+                <h1 class="page-title fw-bold mb-1">Admin Dashboard</h1>
+                <p class="page-subtitle text-muted mb-0">Comprehensive overview of your inventory management system</p>
+            </div>
+            <div class="text-end">
+                <span class="badge bg-light text-dark border">
+                    <i class="bi bi-calendar me-1"></i>
+                    @DateTime.Now.ToString("MMMM dd, yyyy")
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- KPI Metrics Row -->
+    <div class="row g-4 mb-5">
+        <!-- Total Profit Card -->
+        <div class="col-xl-4 col-md-6">
+            <div class="metric-card border-start border-success border-4">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="metric-icon bg-success bg-opacity-10">
+                            <i class="bi bi-graph-up-arrow text-success"></i>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-success bg-opacity-10 text-success">+12.5%</span>
+                        </div>
+                    </div>
+                    <h6 class="metric-label text-muted text-uppercase small fw-semibold">Total Profit</h6>
+                    <h3 class="metric-value fw-bold my-2">Rs @ViewBag.TotalProfit</h3>
+                    <div class="metric-footer d-flex justify-content-between align-items-center">
+                        <span class="text-muted small">
+                            <i class="bi bi-calendar-week me-1"></i>
+                            This month
+                        </span>
+                        <a href="#" class="metric-link small">
+                            View details
+                            <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Purchase Card -->
+        <div class="col-xl-4 col-md-6">
+            <div class="metric-card border-start border-warning border-4">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="metric-icon bg-warning bg-opacity-10">
+                            <i class="bi bi-cart text-warning"></i>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-warning bg-opacity-10 text-warning">-3.2%</span>
+                        </div>
+                    </div>
+                    <h6 class="metric-label text-muted text-uppercase small fw-semibold">Total Purchase</h6>
+                    <h3 class="metric-value fw-bold my-2">Rs @ViewBag.TotalPurchase</h3>
+                    <div class="metric-footer d-flex justify-content-between align-items-center">
+                        <span class="text-muted small">
+                            <i class="bi bi-calendar-week me-1"></i>
+                            This month
+                        </span>
+                        <a href="#" class="metric-link small">
+                            View details
+                            <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Sales Card -->
+        <div class="col-xl-4 col-md-6">
+            <div class="metric-card border-start border-primary border-4">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="metric-icon bg-primary bg-opacity-10">
+                            <i class="bi bi-currency-dollar text-primary"></i>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-primary bg-opacity-10 text-primary">+8.7%</span>
+                        </div>
+                    </div>
+                    <h6 class="metric-label text-muted text-uppercase small fw-semibold">Total Sales</h6>
+                    <h3 class="metric-value fw-bold my-2">Rs @ViewBag.TotalSale</h3>
+                    <div class="metric-footer d-flex justify-content-between align-items-center">
+                        <span class="text-muted small">
+                            <i class="bi bi-calendar-week me-1"></i>
+                            This month
+                        </span>
+                        <a href="#" class="metric-link small">
+                            View details
+                            <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Low Stock Alert Section -->
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-white border-0 py-4 px-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <div class="alert-icon-container bg-danger bg-opacity-10 rounded-3 p-2 me-3">
+                        <i class="bi bi-exclamation-triangle-fill text-danger fs-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="section-title fw-bold mb-1">Low Stock Alert</h3>
+                        <p class="text-muted mb-0">Products requiring immediate attention</p>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-download me-2"></i>
+                        Export
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4 text-uppercase small fw-semibold text-muted">Product</th>
+                            <th class="text-uppercase small fw-semibold text-muted">Current Stock</th>
+                            <th class="text-uppercase small fw-semibold text-muted">Reorder Level</th>
+                            <th class="text-uppercase small fw-semibold text-muted">Status</th>
+                            <th class="text-uppercase small fw-semibold text-muted pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var lowStockItems = Model.Where(p => p.CurrentQuantity <= p.Product.ReorderLevel).ToList();
+                            var hasLowStock = lowStockItems.Any();
+                        }
+
+                        @if (hasLowStock)
+                        {
+                            @foreach (var item in lowStockItems)
+                            {
+                                <tr class="border-top">
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="product-icon bg-light rounded-2 p-2 me-3">
+                                                <i class="bi bi-box-seam text-primary"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-0 fw-semibold">@item.Product.ProductName</h6>
+                                                <small class="text-muted">SKU: @* @item.Product.ProductId *@</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="progress flex-grow-1 me-2" style="height: 6px; max-width: 80px;">
+                                                @{
+                                                    var stockPercentage = (double)item.CurrentQuantity / (item.CurrentQuantity + item.Product.ReorderLevel) * 100;
+                                                }
+                                                <div class="progress-bar @(item.CurrentQuantity == 0 ? "bg-danger" : "bg-warning")"
+                                                     role="progressbar"
+                                                     style="width: @stockPercentage%">
+                                                </div>
+                                            </div>
+                                            <span class="fw-bold">@item.CurrentQuantity</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-light text-dark border">@item.Product.ReorderLevel</span>
+                                    </td>
+                                    <td>
+                                        @if (item.CurrentQuantity == 0)
+                                        {
+                                            <span class="status-badge bg-danger bg-opacity-10 text-danger">
+                                                <i class="bi bi-circle-fill me-1" style="font-size: 8px;"></i>
+                                                Out of Stock
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge bg-warning bg-opacity-10 text-warning">
+                                                <i class="bi bi-circle-fill me-1" style="font-size: 8px;"></i>
+                                                Low Stock
+                                            </span>
+                                        }
+                                    </td>
+                                    <td class="pe-4">
+                                        <div class="d-flex gap-2">
+                                            <a asp-controller="Purchases"
+                                               asp-action="AddPurchase"
+                                               class="btn btn-sm btn-primary px-3 rounded-2 fw-semibold">
+                                                <i class="bi bi-truck me-1"></i>
+                                                Reorder
+                                            </a>
+                                            <button class="btn btn-sm btn-outline-secondary px-3 rounded-2">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <div class="py-4">
+                                        <i class="bi bi-check-circle-fill text-success fs-1 mb-3"></i>
+                                        <h5 class="fw-semibold">All stock levels are healthy</h5>
+                                        <p class="text-muted">No products require reordering at this time</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        @if (hasLowStock)
+        {
+            <div class="card-footer bg-white border-0 py-3 px-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small">
+                            Showing <span class="fw-semibold">@lowStockItems.Count</span> items requiring attention
+                        </span>
+                    </div>
+                    <div>
+                        <a asp-controller="Inventory" asp-action="Index" class="btn btn-link text-decoration-none">
+                            View All Inventory
+                            <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,78 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "Edit Product";
+}        
+
+<div class="flex-fill p-4 bg-light bg-opacity-50">
+    <div class="container-fluid">
+
+
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card rounded-4 shadow-sm border-0 bg-white">
+                    <div class="card-body p-4">
+
+                        <div class="mb-4 align-items-center">
+                            <h2 class="fw-bold text-dark">Edit Product</h2>
+                            <p class="text-muted mb-0">Fill in product details and click Save.</p>
+                        </div>
+                        <form asp-action="UpdateProduct" asp-route-id="@Model.Id" method="post">
+                            <div class="row g-3">
+
+                                <div class="col-md-8">
+                                    <label class="form-label fw-semibold">Product Name</label>
+                                    <input asp-for="ProductName" class="form-control" placeholder="Enter product name" value="@Model.ProductName"/>
+                                    <span asp-validation-for="ProductName" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Barcode</label>
+                                    <input asp-for="Barcode" class="form-control" placeholder="Enter barcode" value="@Model.Barcode"/>
+                                    <span asp-validation-for="Barcode" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Description</label>
+                                    <input asp-for="Description" class="form-control" placeholder="Enter Description" value="@Model.Description" />
+                                    <span asp-validation-for="Description" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Category</label>
+                                    <input asp-for="Category" class="form-control" placeholder="Enter category" value="@Model.Category" />
+                                    <span asp-validation-for="Category" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Cost Price</label>
+                                    <input asp-for="CostPrice" class="form-control" step="0.01" value="@Model.CostPrice" />
+                                    <span asp-validation-for="CostPrice" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Sale Price</label>
+                                    <input asp-for="SalePrice" class="form-control" step="0.01" value="@Model.SalePrice" />
+                                    <span asp-validation-for="SalePrice" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Reorder Level</label>
+                                    <input asp-for="ReorderLevel" class="form-control" step="1" value="@Model.ReorderLevel"  />
+                                    <span asp-validation-for="ReorderLevel" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+                                <a asp-action="Products" class="btn btn-outline-secondary rounded-3">Cancel</a>
+                                <button type="submit" class="btn btn-primary rounded-3">Update Product</button>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,58 @@
+﻿@model Supplier
+@{
+    ViewData["Title"] = "View Supplier";
+}
+<div class="flex-fill p-4 bg-light bg-opacity-50">
+    <div class="container-fluid">
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card rounded-4 shadow-sm border-0 bg-white">
+                    <div class="card-body p-4">
+                        <div class="mb-4">
+                            <h2 class="fw-bold text-dark text-center">View Supplier</h2>
+                            <p class="text-muted mb-0 text-center">Supplier details </p>
+                        </div>
+
+           
+
+                            <div class="row g-3">
+
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Supplier Name</label>
+                                    <input asp-for="SupplierName" class="form-control" placeholder="Enter supplier name"  value="@Model.SupplierName" disabled/>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Contact Number</label>
+                                    <input asp-for="ContactNumber" class="form-control" placeholder="Enter contact number" value="@Model.ContactNumber" disabled />
+                                </div>
+                            @if (Model.Email != null)
+                            {
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Email Address</label>
+                                    <input asp-for="Email" class="form-control" placeholder="Enter email address" value="@Model.Email" disabled />
+                                </div>
+                            }
+                            @if(Model.Address != null)
+                            {<div class="col-12">
+                                    <label class="form-label fw-semibold">Address</label>
+                                    <textarea asp-for="Address" class="form-control" rows="3"
+                                          placeholder="Enter supplier address" value="@Model.Address" disabled></textarea>
+                                </div>
+                            }
+                                <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+                                    <a asp-action="Suppliers" class="btn btn-outline-secondary rounded-3">
+                                    <i class="bi bi-box-arrow-left me-2"></i> Back
+                                    </a>
+                                    
+                                </div>
+                            </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

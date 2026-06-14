@@ -1,0 +1,141 @@
+﻿@model List<Supplier>
+@{
+    ViewData["Title"] = "Suppliers";
+    int currentPage = ViewBag.CurrentPage == null ? 1 : Convert.ToInt32(ViewBag.CurrentPage);
+    int pageSize = ViewBag.PageSize == null ? 5 : Convert.ToInt32(ViewBag.PageSize);
+
+    int total = Convert.ToInt32(ViewBag.TotalEntries);
+
+    int start = (currentPage - 1) * pageSize + 1;
+    int end = Math.Min(currentPage * pageSize, total);
+}
+
+@if (TempData["successMsg"] != null)
+{
+    <div class="popup popup-success" role="alert">@TempData["successMsg"]</div>
+}
+@if (TempData["failMsg"] != null)
+{
+    <div class="popup popup-fail" role="alert">@TempData["failMsg"]</div>
+}
+
+<div class="flex-fill p-4 bg-light bg-opacity-50">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold text-dark">Suppliers Management</h2>
+                <p class="text-muted mb-0">Manage your supplier information and product relationships.</p>
+            </div>
+            <a class="btn btn-primary rounded-3 shadow-sm" asp-action="AddSupplier">
+                <i class="bi bi-plus-lg me-2"></i> Add New Supplier
+            </a>
+        </div>
+
+        <div class="card rounded-4 shadow-lg border-0 bg-white">
+            <div class="card-body p-4">
+                <div class="row g-2 mb-4 align-items-center">
+                    <div class="col-md-10">
+                        <div class="input-group">
+                            <input type="text" id="searchInputSupplier" class="form-control" placeholder="Search suppliers by name, email, or contact..." />
+                            <button class="btn btn-primary" id="searchButtonSupplier" type="button">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-2 text-end">
+                        <button id="clearFiltersSupplier" class="btn btn-outline-secondary" style="display: none;">
+                            <i class="bi bi-x-circle me-1"></i>Clear
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="suppliersTable" class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Supplier Name</th>
+                                <th>Contact</th>
+                                <th>Email</th>
+                                <th class="text-center">View Products</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="suppliersTableBody">
+                            @await Html.PartialAsync("_SuppliersTablePartial", Model)
+
+                        </tbody>
+
+                    </table>
+                </div>
+
+                <!-- Pagination and summary -->
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div class="text-muted" id="paginationInfoSupplier">
+                        Showing @start to @end of <b>@total</b>
+                    </div>
+                    <nav>
+                        <ul class="pagination mb-0" id="paginationControlsSupplier">
+
+                            <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                                <a class="page-link" asp-action="Suppliers" asp-route-page="@(ViewBag.CurrentPage - 1)">
+                                    <i class="bi bi-chevron-left"></i>
+                                </a>
+                            </li>
+
+                            @{
+                                int totalPages = ViewBag.TotalPages;
+                                int current = ViewBag.CurrentPage;
+                                int startPage = Math.Max(1, current - 2);
+                                int endPage = Math.Min(totalPages, current + 2);
+
+                                // Always show first page
+                                if (startPage > 1)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" asp-action="Suppliers" asp-route-page="1">1</a>
+                                    </li>
+                                    if (startPage > 2)
+                                    {
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    }
+                                }
+
+                                // Show pages around current page
+                                for (int i = startPage; i <= endPage; i++)
+                                {
+                                    <li class="page-item @(i == current ? "active" : "")">
+                                        <a class="page-link" asp-action="Suppliers" asp-route-page="@i">@i</a>
+                                    </li>
+                                }
+
+                                // Always show last page
+                                if (endPage < totalPages)
+                                {
+                                    if (endPage < totalPages - 1)
+                                    {
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    }
+                                    <li class="page-item">
+                                        <a class="page-link" asp-action="Suppliers" asp-route-page="@totalPages">@totalPages</a>
+                                    </li>
+                                }
+                            }
+
+                            <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                                <a class="page-link" asp-action="Suppliers" asp-route-page="@(ViewBag.CurrentPage + 1)">
+                                    <i class="bi bi-chevron-right"></i>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </nav>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

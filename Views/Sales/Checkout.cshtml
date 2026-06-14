@@ -1,0 +1,163 @@
+﻿@model List<CartItem>
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+
+<div class="checkout-container">
+    <div class="container">
+        <div class="page-header">
+            <h2><i class="bi bi-receipt"></i> Checkout</h2>
+            <p class="text-muted">Complete your sale transaction</p>
+        </div>
+
+        <div class="row">
+            <!-- Left Column - Customer Details & Payment -->
+            <div class="col-lg-5">
+                <!-- Customer Information Card -->
+                <div class="checkout-card">
+                    <div class="section-header">
+                        <i class="bi bi-person-circle"></i>
+                        Customer Information
+                    </div>
+                    <div class="card-body p-4">
+                        <form id="checkoutForm">
+                            <div class="mb-3">
+                                <label for="customerName" class="form-label required-field">Customer Name</label>
+                                <input type="text" class="form-control" id="customerName" name="customerName"
+                                       placeholder="Enter customer name" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="customerPhone" class="form-label required-field">Phone Number</label>
+                                <input type="tel" class="form-control" id="customerPhone" name="customerPhone"
+                                       placeholder="+92 300 1234567" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="customerEmail" class="form-label">Email Address <small class="text-muted">(Optional)</small></label>
+                                <input type="email" class="form-control" id="customerEmail" name="customerEmail"
+                                       placeholder="customer@example.com">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Payment Method Card -->
+                <div class="checkout-card">
+                    <div class="section-header">
+                        <i class="bi bi-credit-card"></i>
+                        Payment Method
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="payment-method-card" onclick="selectPayment('cash')">
+                            <div class="d-flex align-items-center">
+                                <input type="radio" name="paymentMethod" id="paymentCash" value="cash" checked>
+                                <label for="paymentCash" class="ms-3 flex-grow-1 cursor-pointer mb-0">
+                                    <div class="payment-icon">💵</div>
+                                    <div class="fw-bold">Cash Payment</div>
+                                    <small class="text-muted">Pay with physical cash</small>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="payment-method-card" onclick="selectPayment('card')">
+                            <div class="d-flex align-items-center">
+                                <input type="radio" name="paymentMethod" id="paymentCard" value="card">
+                                <label for="paymentCard" class="ms-3 flex-grow-1 cursor-pointer mb-0">
+                                    <div class="payment-icon">💳</div>
+                                    <div class="fw-bold">Card Payment</div>
+                                    <small class="text-muted">Credit or Debit card</small>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="payment-method-card" onclick="selectPayment('bank')">
+                            <div class="d-flex align-items-center">
+                                <input type="radio" name="paymentMethod" id="paymentBank" value="bank">
+                                <label for="paymentBank" class="ms-3 flex-grow-1 cursor-pointer mb-0">
+                                    <div class="payment-icon">🏦</div>
+                                    <div class="fw-bold">Bank Transfer</div>
+                                    <small class="text-muted">Direct bank transfer</small>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="payment-method-card" onclick="selectPayment('mobile')">
+                            <div class="d-flex align-items-center">
+                                <input type="radio" name="paymentMethod" id="paymentMobile" value="mobile">
+                                <label for="paymentMobile" class="ms-3 flex-grow-1 cursor-pointer mb-0">
+                                    <div class="payment-icon">📱</div>
+                                    <div class="fw-bold">Mobile Payment</div>
+                                    <small class="text-muted">JazzCash, Easypaisa, etc.</small>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Invoice Preview -->
+            <div class="col-lg-7">
+                <div class="checkout-card">
+                    <div class="section-header">
+                        <i class="bi bi-file-earmark-text"></i>
+                        Sale Invoice
+                    </div>
+                    <div class="card-body p-4">
+                        <div id="invoiceContent">
+                            <div class="invoice-header">
+                                <h4 class="mb-1">SALES INVOICE</h4>
+                                <div class="invoice-number">Invoice #: <span id="invoiceNumber">INV-<span class="invoice-id"></span></span></div>
+                                <div class="invoice-date">Date: <span id="invoiceDate"></span></div>
+                            </div>
+
+                            <table class="invoice-table">
+                                <thead>
+                                    <tr>
+                                        <th width="50%">Product</th>
+                                        <th width="15%" class="text-center">Qty</th>
+                                        <th width="15%" class="text-end">Price</th>
+                                        <th width="20%" class="text-end">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="invoiceItems">
+                                    <!-- Items will be loaded here -->
+                                </tbody>
+                            </table>
+
+                            <div class="invoice-summary">
+                                <div class="summary-row">
+                                    <span>Subtotal:</span>
+                                    <span id="subtotal">Rs. 0.00</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Tax (0%):</span>
+                                    <span id="tax">Rs. 0.00</span>
+                                </div>
+                                <div class="summary-row total">
+                                    <span>Total Amount:</span>
+                                    <span id="totalAmount">Rs. 0.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <button type="button" class="back-to-pos-btn" onclick="window.location.href='/Sales/POS'">
+                            <i class="bi bi-arrow-left me-2"></i>Back to POS
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" class="confirm-sale-btn" id="confirmSaleBtn">
+                            <i class="bi bi-check-circle me-2"></i>Confirm Sale
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

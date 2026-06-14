@@ -1,0 +1,137 @@
+﻿@{
+    ViewData["Title"] = "Inventory/Products";
+}
+
+<!-- Main Content -->
+<div class="flex-fill p-4 bg-light bg-opacity-50">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold text-dark">Products Management</h2>
+
+                <p class="text-muted mb-0">Manage your inventory products</p>
+            </div>
+            <a class="btn btn-primary rounded-3" asp-action="AddProduct">
+                <i class="bi bi-plus-lg me-2"></i> Add New Product
+            </a>
+        </div>
+
+        <div class="card rounded-4 shadow-sm border-0 bg-white">
+            <div class="card-body">
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                            <input type="text" class="form-control" placeholder="Search products..." />
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+
+                        <select class="form-select">
+                            <option>All Categories</option>
+                            <option>-content-</option>
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <select class="form-select">
+                            <option>All Suppliers</option>
+
+                            <option>-content-</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <select class="form-select">
+                            <option>All Stock</option>
+
+                            <option>Low Stock</option>
+                            <option>In Stock</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Category</th>
+
+                                <th>Supplier</th>
+                                <th>Cost Price</th>
+
+                                <th>Sale Price</th>
+                                <th>Quantity</th>
+                                <th>Barcode</th>
+
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+
+                                        <div class="bg-light rounded p-2 me-2">
+                                            <i class="bi bi-box text-primary" style="font-size: 20px;"></i>
+                                        </div>
+                                        <span class="fw-bold">-content-</span>
+                                    </div>
+                                </td>
+
+                                <td><span class="badge bg-light text-dark">-content-</span></td>
+                                <td>-content-</td>
+
+                                <td class="text-muted">-content-</td>
+                                <td class="fw-bold">-content-</td>
+                                <td><span class="badge bg-success">-content-</span></td>
+
+                                <td><code>-content-</code></td>
+                                <td>
+
+                                    <div class="d-flex justify-content-center gap-1">
+                                        <a class="btn btn-sm btn-outline-info" title="View" asp-action="ViewProduct">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+
+                                        <a class="btn btn-sm btn-outline-primary" title="Edit" asp-action="EditProduct">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-outline-danger" title="Delete" asp-action="DeleteProduct">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div class="text-muted">Showing 1 to 1 of 1 entries</div>
+                    <nav>
+
+                        <ul class="pagination mb-0">
+                            <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                            <li class="page-item active"><span class="page-link">1</span></li>
+
+                            <li class="page-item"><span class="page-link">2</span></li>
+                            <li class="page-item"><span class="page-link">Next</span></li>
+                        </ul>
+
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

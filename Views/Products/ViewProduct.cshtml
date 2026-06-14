@@ -1,0 +1,72 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "View Product";
+}        
+
+<div class="flex-fill p-4 bg-light bg-opacity-50">
+    <div class="container-fluid">
+
+
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card rounded-4 shadow-sm border-0 bg-white">
+                    <div class="card-body p-4">
+
+                        <div class="mb-4 align-items-center">
+                            <h2 class="fw-bold text-dark text-center">View Product</h2>
+                            <p class="text-muted mb-0 text-center ">Product details</p>
+                        </div>
+                            <div class="row g-3">
+
+                                <div class="col-md-8">
+                                    <label class="form-label fw-semibold">Product Name</label>
+                                <input asp-for="ProductName" class="form-control" value="@Model.ProductName" disabled />
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Barcode</label>
+                                <input asp-for="Barcode" class="form-control" value="@Model.Barcode" disabled />
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Description</label>
+                                <input asp-for="Description" class="form-control" value="@Model.Description" disabled />
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Category</label>
+                                <input asp-for="Category" class="form-control" value="@Model.Category" disabled />
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Cost Price</label>
+                                <input asp-for="CostPrice" class="form-control" step="0.01" value="@Model.CostPrice" disabled />
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Sale Price</label>
+                                    <input asp-for="SalePrice" class="form-control" step="0.01" value="@Model.SalePrice" disabled/>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Reorder Level</label>
+                                    <input asp-for="ReorderLevel" class="form-control"  value="@Model.ReorderLevel" disabled/>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Created On</label>
+                                <span class="form-control" style="font-weight:bold;background-color:#E9ECEF">@Model.CreatedAt</span>
+                                </div>
+
+                            </div>
+
+                        <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+                            <a asp-action="Products" class="btn btn-outline-secondary rounded-3">Back</a>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

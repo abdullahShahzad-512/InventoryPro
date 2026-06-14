@@ -1,0 +1,145 @@
+﻿@model List<InventoryTransaction>
+@{
+    ViewData["Title"] = "Transaction Reports";
+    var inventorySummary = ViewBag.InventorySummary;
+
+}
+<!-- Main Content -->
+<div class="flex-fill p-4 bg-light bg-opacity-50">
+    <div class="container-fluid">
+        <div class="mb-4">
+            <h2 class="fw-bold text-dark">Reports</h2>
+            <p class="text-muted mb-0">View analytics and reports</p>
+        </div>
+        
+
+        <div class="card rounded-4 shadow-sm border-0 bg-white mt-4">
+            <div class="card-body">
+                <h5>Recent Purchases</h5>
+                <div class="table-responsive">
+
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+
+                                <th>Date</th>
+                                <th>Transaction Type</th>
+                                <th>Reference</th>
+                                <th>Total Price</th>
+                                
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach(var transaction in Model)
+							{
+                            <tr>
+                                    <td>@transaction.TransactionDate.ToString("MMM,dd yyyy hh:mm tt")</td>
+                                <td>@transaction.TransactionType</td>
+                                <td>
+                                    @if(transaction.TransactionType=="Purchase")
+									{
+                                            <a class="btn btn-sm btn-outline-info action-btn"
+                                                asp-controller="Purchases"   
+                                                asp-action="ViewPurchase"
+                                               asp-route-id="@transaction.ReferenceId"
+                                               title="View">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+									}
+									else if(transaction.TransactionType=="Sale")
+									{
+                                            <a class="btn btn-sm btn-outline-info action-btn" asp-controller="Sales" asp-action="GetInvoice" asp-route-id="@transaction.ReferenceId"
+                                                title="View">
+                                                <i class="bi bi-eye"></i>
+										</a>
+									}
+                                </td>
+                               <td>@transaction.TotalPrice</td>
+                                
+
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        @{
+                            int currentPage = ViewBag.CurrentPage == null ? 1 : Convert.ToInt32(ViewBag.CurrentPage);
+                            int pageSize = ViewBag.PageSize == null ? 5 : Convert.ToInt32(ViewBag.PageSize);
+
+                            int total = Convert.ToInt32(ViewBag.TotalEntries);
+
+                            int start = (currentPage - 1) * pageSize + 1;
+                            int end = Math.Min(currentPage * pageSize, total);
+                        }
+                        <div class="text-muted" id="paginationInfo">
+                            Showing @start to @end of <b>@total</b>
+                        </div>
+                        <nav>
+                            <ul class="pagination mb-0" id="paginationControls">
+
+                                <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                                    <a class="page-link" asp-action="Reports" asp-route-page="@(ViewBag.CurrentPage - 1)">
+                                        <i class="bi bi-chevron-left"></i>
+                                    </a>
+                                </li>
+
+                                @{
+                                    int totalPages = ViewBag.TotalPages;
+                                    int current = ViewBag.CurrentPage;
+                                    int startPage = Math.Max(1, current - 2);
+                                    int endPage = Math.Min(totalPages, current + 2);
+
+                                    // Always show first page
+                                    if (startPage > 1)
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link" asp-action="Reports" asp-route-page="1">1</a>
+                                        </li>
+                                        if (startPage > 2)
+                                        {
+                                            <li class="page-item disabled">
+                                                <span class="page-link">...</span>
+                                            </li>
+                                        }
+                                    }
+
+                                    // Show pages around current page
+                                    for (int i = startPage; i <= endPage; i++)
+                                    {
+                                        <li class="page-item @(i == current ? "active" : "")">
+                                            <a class="page-link" asp-action="Reports" asp-route-page="@i">@i</a>
+                                        </li>
+                                    }
+
+                                    // Always show last page
+                                    if (endPage < totalPages)
+                                    {
+                                        if (endPage < totalPages - 1)
+                                        {
+                                            <li class="page-item disabled">
+                                                <span class="page-link">...</span>
+                                            </li>
+                                        }
+                                        <li class="page-item">
+                                            <a class="page-link" asp-action="Reports" asp-route-page="@totalPages">@totalPages</a>
+                                        </li>
+                                    }
+                                }
+
+                                <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                                    <a class="page-link" asp-action="Reports" asp-route-page="@(ViewBag.CurrentPage + 1)">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </nav>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

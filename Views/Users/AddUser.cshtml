@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "Add User";
+}
+
+ <!-- Main Content -->
+        <div class="flex-fill p-4 bg-light bg-opacity-50">
+            <div class="container-fluid">
+
+
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card rounded-4 shadow-sm border-0 bg-white">
+
+                            <div class="card-body p-4">
+                                <div class="mb-4">
+                                    <h2 class="fw-bold text-dark text-center">Add New User</h2>
+                                    <p class="text-muted mb-0 text-center">Create a new user account with role
+                                        assignment</p>
+                                </div>
+                                <form action="#" method="post">
+
+                                    <div class="text-danger mb-3"></div>
+
+                                    <div class="mb-3">
+
+                                        <label class="form-label fw-semibold">Full Name</label>
+                                        <input type="text" class="form-control" placeholder="Enter full name"
+                                            required />
+                                        <span class="text-danger small"></span>
+
+                                    </div>
+                                    <div class="mb-3">
+
+                                        <label class="form-label fw-semibold">Email Address</label>
+                                        <input type="email" class="form-control" placeholder="Enter email address"
+                                            required />
+                                        <span class="text-danger small"></span>
+
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">Password</label>
+                                        <input type="password" class="form-control" placeholder="Enter password"
+                                            required />
+                                        <span class="text-danger small"></span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">User Role</label>
+
+                                        <select class="form-select" required>
+                                            <option value="">Select a role</option>
+                                            <option value="admin">Admin</option>
+
+                                            <option value="staff">Staff</option>
+                                        </select>
+                                        <span class="text-danger small"></span>
+                                    </div>
+
+
+                                    <div class="d-flex justify-content-end gap-2 mt-4">
+                                        <a href="UserManagement.html" class="btn btn-outline-secondary rounded-3">
+                                            <i class="bi bi-x-lg me-2"></i>Cancel
+                                        </a>
+                                        <button type="submit" class="btn btn-primary rounded-3">
+                                            <i class="bi bi-check-lg me-2"></i>Create User
+                                        </button>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>

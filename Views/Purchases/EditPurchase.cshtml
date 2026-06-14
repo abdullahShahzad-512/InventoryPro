@@ -1,0 +1,112 @@
+@model Purchase
+@{
+    ViewData["Title"] = "Edit Purchase";
+    Purchase purchase=Model;
+    var DiscountOrTax = purchase.DiscountAmount>=0?"Discount":"Tax";
+    var DiscountOrTaxAmount = purchase.DiscountAmount >= 0 ? purchase.DiscountAmount : Math.Abs(purchase.DiscountAmount);
+}
+
+
+
+     <div class="purchase-card card rounded-4 shadow-sm mb-4 overflow-hidden mx-3 px-2">
+            <!-- Header Row -->
+            <div class="row g-0">
+                <div class="col header-cell">Date & Time</div>
+                <div class="col header-cell">Supplier</div>
+                
+                <div class="col header-cell">Total Paid Price</div>
+            </div>
+            <form asp-action="UpdatePurchase" method="post">
+               <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div class="row g-0 bg-white">
+                
+                <div class="col data-cell">
+                    <div class="cell-label">Date & Time</div> 
+                   <div class="cell-value">@purchase.PurchaseDate.ToString("dd/MM/yyyy")</div>
+                    <small class="text-muted">@purchase.PurchaseDate.ToString("hh:mm tt")</small>
+                </div>
+                <div class="col data-cell">
+                    <div class="cell-label">Supplier Name</div>
+                    <div class="cell-value">
+                        <i class="bi bi-building me-1 text-primary"></i>
+                    <select asp-for="SupplierId" class="form-select" id="selectSupplier" required>
+                        <option value="@purchase.SupplierId">@purchase.Supplier.SupplierName</option>
+                    </select>
+                    <span asp-validation-for="SupplierId" class="text-danger"></span>
+                        
+                    </div>
+                </div>
+               
+               
+                <div class="col data-cell">
+                    <div class="cell-label">Total Amount</div>
+                    <div class="cell-value text-success fs-5">
+                        <input asp-for="@purchase.TotalPaidAmount" value="@purchase.TotalPaidAmount"/>
+                    <span asp-validation-for="TotalPaidAmount" class="text-danger"></span>
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- Products Table -->
+            @if (purchase.PurchaseProducts != null && purchase.PurchaseProducts.Count > 0)
+            {
+                <div class="row g-0">
+                    <div class="col-12 products-table-cell">
+                        <table class="table mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="text-center py-3" style="width: 10%;">#</th>
+                                    <th class="py-3" style="width: 40%;">Product Name</th>
+                                    <th class="text-center py-3" style="width: 15%;">Qty</th>
+                                    <th class="text-center py-3" style="width: 15%;">Unit Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                        
+                        @for (int itemIndex=0;itemIndex< purchase.PurchaseProducts.Count;itemIndex++)
+                        {
+                            <tr class="product-row">
+                                <td class="text-center py-3">
+                                    <span class="badge bg-light text-dark">@itemIndex</span>
+                                </td>
+                                <td class="py-3">
+                                    <i class="bi bi-box-seam me-2 text-muted"></i>
+										<input class="fw-semibold" asp-for="@purchase.PurchaseProducts[itemIndex].Product.ProductName" value="@purchase.PurchaseProducts[itemIndex].Product.ProductName"/>
+                                         <span asp-validation-for="PurchaseProducts[itemIndex].Product.ProductName" class="text-danger"></span>
+                                </td>
+                                <td class="text-center py-3">
+                                        <input class="badge bg-secondary text-black " asp-for="@purchase.PurchaseProducts[itemIndex].Quantity" value="@purchase.PurchaseProducts[itemIndex].Quantity"/>
+                                        
+                                </td>
+                                <td class="text-center py-3">
+                                        <input class="badge bg-secondary text-black " asp-for="@purchase.PurchaseProducts[itemIndex].CostPrice" value="@purchase.PurchaseProducts[itemIndex].CostPrice" />
+                                </td>
+                               
+                            </tr>
+                            
+                        }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+            <div class="row g-3">
+        <div class="col-12">
+            <label class="form-label fw-bold">Note:</label>
+            <textarea asp-for="@purchase.Notes" class="form-control" rows="3" value="@purchase.Notes" ></textarea>
+        </div>
+        
+        <div class="col-12 d-flex justify-content-end gap-2 mb-2">
+            <a asp-action="Purchases" class="btn btn-outline-secondary rounded-3">
+                <i class="bi bi-box-arrow-left me-2"></i> Back
+            </a>
+            <button  class="btn btn-outline-secondary rounded-3 bg-info text-light">
+                <i class="bi bi-box-tick-left me-2"></i> Update
+            </button>
+
+        </div>
+                </div>
+        </form>
+</div>
+    

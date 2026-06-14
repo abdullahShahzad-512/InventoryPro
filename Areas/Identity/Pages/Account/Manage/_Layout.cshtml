@@ -1,0 +1,429 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Management - Inventory Management System</title>
+    
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/Layout.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Brand -->
+            <div class="sidebar-brand">
+                <a class="brand-logo" asp-controller="Dashboard" asp-action="Index">
+                    <div class="brand-icon">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+                    <div class="brand-text">
+                        <h4>InventoryPro</h4>
+                        <span>Management System</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">MAIN</div>
+                    <a asp-controller="Dashboard" asp-action="Index" class="nav-link">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="nav-section">
+                        <div class="nav-section-title">INVENTORY</div>
+                        <a asp-controller="Inventory" asp-action="Inventory" class="nav-link">
+                            <i class="bi bi-boxes"></i>
+                            <span>Inventory</span>
+                        </a>
+                        <a asp-controller="Products" asp-action="Products" class="nav-link">
+                            <i class="bi bi-box"></i>
+                            <span>Products</span>
+                        </a>
+                    </div>
+
+                    <div class="nav-section">
+                        <div class="nav-section-title">PARTNERS</div>
+                        <a asp-controller="Suppliers" asp-action="Suppliers" class="nav-link">
+                            <i class="bi bi-truck"></i>
+                            <span>Suppliers</span>
+                        </a>
+                        <a asp-controller="Customers" asp-action="Customers" class="nav-link">
+                            <i class="bi bi-people"></i>
+                            <span>Customers</span>
+                        </a>
+                    </div>
+
+                    <div class="nav-section">
+                        <div class="nav-section-title">TRANSACTIONS</div>
+                        <a asp-controller="Sales" asp-action="POS" class="nav-link">
+                            <i class="bi bi-cart"></i>
+                            <span>POS System</span>
+                        </a>
+                        <a asp-controller="Sales" asp-action="Sales" class="nav-link">
+                            <i class="bi bi-receipt"></i>
+                            <span>Sales</span>
+                        </a>
+                        <a asp-controller="Purchases" asp-action="Purchases" class="nav-link">
+                            <i class="bi bi-bag"></i>
+                            <span>Purchases</span>
+                        </a>
+                    </div>
+
+                    <div class="nav-section">
+                        <div class="nav-section-title">REPORTS & ADMIN</div>
+                        <a asp-controller="Reports" asp-action="Reports" class="nav-link">
+                            <i class="bi bi-bar-chart"></i>
+                            <span>Reports & Analytics</span>
+                        </a>
+                        <a asp-controller="Users" asp-action="UserManagement" class="nav-link">
+                            <i class="bi bi-person-gear"></i>
+                            <span>User Management</span>
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div class="nav-section">
+                        <div class="nav-section-title">SALES</div>
+                        <a asp-controller="Sales" asp-action="POS" class="nav-link">
+                            <i class="bi bi-cart"></i>
+                            <span>POS System</span>
+                        </a>
+                    </div>
+                }
+
+                <!-- Logout Button -->
+                <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Dashboard", new { area = "" })"
+                   class="logout-btn">
+                    <i class="bi bi-box-arrow-left"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <div class="page-title">
+                        <h1>Account Management</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Account Management</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <a style="text-decoration: inherit;color: inherit;" asp-area="Identity" asp-page="/Account/Manage/Index">
+                            @User.Identity?.Name?.Substring(0, 1).ToUpper()
+                        </a>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">@User.Identity?.Name?.Split('@')[0]</div>
+                        <div class="user-role">
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <span class="status-badge badge-admin">
+                                    <i class="bi bi-shield-check"></i> Administrator
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="status-badge badge-user">
+                                    <i class="bi bi-person"></i> Sales Agent
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-wrapper fade-in">
+                <div class="container-fluid py-4">
+                    <div class="row g-4">
+                        <!-- Sidebar Navigation -->
+                        <div class="col-xl-3 col-lg-4">
+                            <div class="settings-sidebar card border-0 shadow-sm">
+                                <div class="card-header bg-white border-0 py-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="settings-icon bg-primary bg-opacity-10 rounded-3 p-2 me-3">
+                                            <i class="bi bi-gear text-primary fs-4"></i>
+                                        </div>
+                                        <h5 class="mb-0 fw-semibold">Settings Menu</h5>
+                                    </div>
+                                </div>
+                                <div class="card-body p-0">
+                                    <nav class="settings-nav">
+                                        <partial name="_ManageNav" />
+                                    </nav>
+                                </div>
+                            </div>
+
+                            <!-- Account Status Card -->
+                            <div class="account-status card border-0 shadow-sm mt-4">
+                                <div class="card-body p-4">
+                                    <h6 class="fw-semibold mb-3">Account Status</h6>
+                                    <div class="status-item d-flex justify-content-between mb-2">
+                                        <span class="text-muted">Email Verified</span>
+                                        <span class="badge bg-success bg-opacity-10 text-success">
+                                            <i class="bi bi-check-circle me-1"></i>
+                                            Verified
+                                        </span>
+                                    </div>
+                                    <div class="status-item d-flex justify-content-between mb-2">
+                                        <span class="text-muted">2FA Enabled</span>
+                                        <span class="badge bg-warning bg-opacity-10 text-warning">
+                                            <i class="bi bi-shield me-1"></i>
+                                            Recommended
+                                        </span>
+                                    </div>
+                                    <div class="status-item d-flex justify-content-between">
+                                        <span class="text-muted">Last Login</span>
+                                        <span class="text-muted small">Today, @DateTime.Now.ToString("h:mm tt")</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Main Content Area -->
+                        <div class="col-xl-9 col-lg-8">
+                            <div class="settings-content card border-0 shadow-sm">
+                                <div class="card-header bg-white border-0 py-4">
+                                    <h2 class="section-title fw-semibold mb-0">
+                                        <i class="bi bi-sliders me-2 text-primary"></i>
+                                        Account Settings
+                                    </h2>
+                                    <p class="text-muted small mb-0">Configure and manage your account preferences</p>
+                                </div>
+                                <div class="card-body p-4 p-lg-5">
+                                    @RenderBody()
+                                </div>
+                            </div>
+
+                            <!-- Security Tips -->
+                            <div class="security-tips card border-0 shadow-sm mt-4">
+                                <div class="card-body p-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="security-icon bg-danger bg-opacity-10 rounded-3 p-2 me-3">
+                                            <i class="bi bi-shield-check text-danger"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-semibold mb-0">Security Recommendations</h6>
+                                            <p class="text-muted small mb-0">Keep your account secure</p>
+                                        </div>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <div class="tip-item border rounded-2 p-3 h-100">
+                                                <i class="bi bi-key text-primary fs-5 mb-2"></i>
+                                                <h6 class="fw-semibold mb-2">Strong Password</h6>
+                                                <p class="small text-muted mb-0">Use a unique password with special characters</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="tip-item border rounded-2 p-3 h-100">
+                                                <i class="bi bi-shield-lock text-primary fs-5 mb-2"></i>
+                                                <h6 class="fw-semibold mb-2">Two-Factor Auth</h6>
+                                                <p class="small text-muted mb-0">Enable 2FA for enhanced security</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="tip-item border rounded-2 p-3 h-100">
+                                                <i class="bi bi-bell text-primary fs-5 mb-2"></i>
+                                                <h6 class="fw-semibold mb-6">Activity Alerts</h6>
+                                                <p class="small text-muted mb-0">Get notified about account activity</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Settings Sidebar */
+        .settings-sidebar {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .settings-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .settings-nav {
+            padding: 0;
+        }
+
+        .settings-nav .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            color: #64748b;
+            text-decoration: none;
+            border-left: 4px solid transparent;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .settings-nav .nav-link:last-child {
+            border-bottom: none;
+        }
+
+        .settings-nav .nav-link i {
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .settings-nav .nav-link:hover {
+            background: rgba(67, 97, 238, 0.05);
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+        }
+
+        .settings-nav .nav-link.active {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Account Status Card */
+        .account-status {
+            border-radius: var(--border-radius);
+        }
+
+        .status-item {
+            padding: 8px 0;
+        }
+
+        /* Settings Content */
+        .settings-content {
+            border-radius: var(--border-radius);
+            min-height: 400px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #1e293b;
+        }
+
+        /* Security Tips */
+        .security-tips {
+            border-radius: var(--border-radius);
+        }
+
+        .security-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tip-item {
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .tip-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary-light);
+        }
+
+        /* Responsive Design */
+        media (max-width: 992px) {
+            .settings-sidebar {
+                margin-bottom: 20px;
+            }
+        }
+
+        media (max-width: 768px) {
+            .section-title {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Mobile menu toggle
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.querySelector('.sidebar');
+            const menuToggle = document.getElementById('menuToggle');
+            
+            if (window.innerWidth <= 992 && 
+                !sidebar.contains(event.target) && 
+                !menuToggle.contains(event.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // Add active class to current nav item
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.settings-nav .nav-link');
+
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') && currentPath.includes(link.getAttribute('href'))) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Add animation to cards
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.animation = `fadeIn 0.3s ease-out ${index * 0.1}s both`;
+            });
+        });
+    </script>
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
